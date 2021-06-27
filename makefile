@@ -9,3 +9,6 @@ build:
 
 run:
 	sudo docker exec -ti cql ./bin/cql
+
+test:
+	sudo docker exec -ti cql go test ./lexer
