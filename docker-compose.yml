@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  cql:
+    container_name: cql
+    build: 
+      context: ./cql
+    volumes:
+      - ./cql:/cql
+    tty: true
