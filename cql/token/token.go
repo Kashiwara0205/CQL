@@ -8,6 +8,9 @@ type Token struct{
 }
 
 const(
+	EOF = "EOF"
+	ILLEGAL = "ILLEGAL"
+	
 	// QUERY OPERATOR
 	CREATE = "CREATE"
 	CSV = "CSV"

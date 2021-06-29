@@ -1,10 +1,21 @@
 package lexer
 
+import(
+	"cql/token"
+)
+
 type Lexer struct{
 	input string
 	position int
 	nextPosition int
 	ch byte
+}
+
+func New(input string) *Lexer{
+	lex := &Lexer{input: input}
+	lex.readChar()
+
+	return lex
 }
 
 func (lex *Lexer) isEnd() bool{
@@ -30,9 +41,21 @@ func (lex *Lexer) readChar(){
 	lex.updatePosition()
 }
 
-func New(input string) *Lexer{
-	lex := &Lexer{input: input}
+func (lex *Lexer) NextToken() token.Token{
+	var tok token.Token
+
+	switch lex.ch{
+	case '(':
+		tok = token.New(token.LPAREN, string(lex.ch))
+	case ')':
+		tok = token.New(token.RPAREN, string(lex.ch))
+	case 0:
+		tok = token.New(token.EOF, "")
+	default:
+		tok = token.New(token.ILLEGAL, "")
+	}
+
 	lex.readChar()
 
-	return lex
+	return tok
 }

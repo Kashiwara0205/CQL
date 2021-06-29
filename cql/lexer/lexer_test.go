@@ -2,6 +2,7 @@ package lexer
 
 import (
 	"testing"
+	"cql/token"
 )
 
 func checkLexData(lex *Lexer, input string, position int, nextPosition int, ch byte) bool {
@@ -102,4 +103,48 @@ func TestReadChar(t *testing.T){
 
 	lex.readChar()
 	if !checkLexData(lex, "CREATE;", 9, 10, 0){ t.Errorf("Failed Test") }
+}
+
+func TestNextToken(t *testing.T){
+	var lex = New("()")
+
+	var tok = lex.NextToken()
+
+	if tok.Type != token.LPAREN{
+		t.Errorf("Failed Test")
+	}
+
+	if tok.Literal != "(" {
+		t.Errorf("Failed Test")
+	}
+
+	tok = lex.NextToken()
+
+	if tok.Type != token.RPAREN{
+		t.Errorf("Failed Test")
+	}
+
+	if tok.Literal != ")" {
+		t.Errorf("Failed Test")
+	}
+
+	tok = lex.NextToken()
+
+	if tok.Type != token.EOF{
+		t.Errorf("Failed Test")
+	}
+
+	if tok.Literal != "" {
+		t.Errorf("Failed Test")
+	}
+
+	tok = lex.NextToken()
+
+	if tok.Type != token.EOF{
+		t.Errorf("Failed Test")
+	}
+
+	if tok.Literal != "" {
+		t.Errorf("Failed Test")
+	}
 }
