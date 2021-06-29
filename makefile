@@ -12,3 +12,4 @@ run:
 
 test:
 	sudo docker exec -ti cql go test ./lexer
+	sudo docker exec -ti cql go test ./token
