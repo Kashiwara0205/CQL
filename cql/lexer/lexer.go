@@ -2,6 +2,7 @@ package lexer
 
 import(
 	"cql/token"
+	"fmt"
 )
 
 type Lexer struct{
@@ -17,6 +18,13 @@ func New(input string) *Lexer{
 
 	return lex
 }
+
+func (lex *Lexer) Puts(){
+	fmt.Printf("input: %v\n", lex.input)
+	fmt.Printf("position: %v\n", lex.position)
+	fmt.Printf("nextPosition: %v\n", lex.nextPosition)
+	fmt.Printf("ch: %v\n", lex.ch)
+} 
 
 func (lex *Lexer) isEnd() bool{
 	return lex.nextPosition >= len(lex.input)
@@ -51,11 +59,36 @@ func (lex *Lexer) NextToken() token.Token{
 		tok = token.New(token.RPAREN, string(lex.ch))
 	case 0:
 		tok = token.New(token.EOF, "")
+	case ';':
+		tok = token.New(token.SEMICOLON, string(lex.ch))
 	default:
+
+		if isLetter(lex.ch) {
+			literal := lex.readIdentifiter()
+			tokType := token.LookupIdent(literal)
+
+			return token.New(tokType, literal)
+		}
+
+
 		tok = token.New(token.ILLEGAL, "")
 	}
 
 	lex.readChar()
 
 	return tok
+}
+
+func isLetter(ch byte) bool{
+	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
+}
+
+func (lex *Lexer) readIdentifiter() string{
+	position := lex.position
+
+	for isLetter(lex.ch){
+		lex.readChar()
+	}
+
+	return lex.input[position:lex.position]
 }

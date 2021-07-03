@@ -11,5 +11,5 @@ run:
 	sudo docker exec -ti cql ./bin/cql
 
 test:
-	sudo docker exec -ti cql go test ./lexer
-	sudo docker exec -ti cql go test ./token
+	sudo docker exec -ti cql go test -v ./lexer
+	sudo docker exec -ti cql go test -v ./token

@@ -5,22 +5,75 @@ import (
 	"cql/token"
 )
 
-func checkLexData(lex *Lexer, input string, position int, nextPosition int, ch byte) bool {
+func assertLexData(lex *Lexer, input string, position int, nextPosition int, ch byte) bool {
 	if input != lex.input{ return false }
-
 	if position != lex.position{ return false }
-
-	if nextPosition != lex.nextPosition{ return false }
-
+	if nextPosition != lex.nextPosition{ return false }\
 	if ch != lex.ch{ return false }
 
 	return true
 }
 
+func assertTokenData(tok token.Token, literal string, tokenType token.TokenType) bool {
+	if literal != tok.Literal{ return false }
+	if tokenType != tok.Type{ return false }
+
+	return true
+}
+
+func TestCreateToken(t *testing.T){
+	lex := New("create")
+	tok := lex.NextToken()
+	if !assertLexData(lex, "create", 6, 7, 0){ t.Errorf("Failed Test") }
+	if !assertTokenData(tok, "create", token.CREATE){ t.Errorf("Failed Test") }
+}
+
+func TestDirToken(t *testing.T){
+	lex := New("dir")
+	tok := lex.NextToken()
+	if !assertLexData(lex, "dir", 3, 4, 0){ t.Errorf("Failed Test") }
+	if !assertTokenData(tok, "dir", token.DIR){ t.Errorf("Failed Test") }
+}
+
+func TestCsvToken(t *testing.T){
+	lex := New("csv")
+	tok := lex.NextToken()
+	if !assertLexData(lex, "csv", 3, 4, 0){ t.Errorf("Failed Test") }
+	if !assertTokenData(tok, "csv", token.CSV){ t.Errorf("Failed Test") }
+}
+
+func TestSemicolonToken(t *testing.T){
+	lex := New(";")
+	tok := lex.NextToken()
+	if !assertLexData(lex, ";", 1, 2, 0){ t.Errorf("Failed Test") }
+	if !assertTokenData(tok, ";", token.SEMICOLON){ t.Errorf("Failed Test") }
+}
+
+func TestRparenToken(t *testing.T){
+	lex := New(")")
+	tok := lex.NextToken()
+	if !assertLexData(lex, ")", 1, 2, 0){ t.Errorf("Failed Test") }
+	if !assertTokenData(tok, ")", token.RPAREN){ t.Errorf("Failed Test") }
+}
+
+func TestLparenToken(t *testing.T){
+	lex := New("(")
+	tok := lex.NextToken()
+	if !assertLexData(lex, "(", 1, 2, 0){ t.Errorf("Failed Test") }
+	if !assertTokenData(tok, "(", token.LPAREN){ t.Errorf("Failed Test") }
+}
+
+func TestLiteralToken(t *testing.T){
+	lex := New("apple")
+	tok := lex.NextToken()
+	if !assertLexData(lex, "apple", 5, 6, 0){ t.Errorf("Failed Test") }
+	if !assertTokenData(tok, "apple", token.IDENT){ t.Errorf("Failed Test") }
+}
+
 func TestNewLexer(t *testing.T){
 	lex := New("CREATE DIR test;")
 
-	if !checkLexData(lex, "CREATE DIR test;", 0, 1, 'C'){ t.Errorf("Failed Test") }
+	if !assertLexData(lex, "CREATE DIR test;", 0, 1, 'C'){ t.Errorf("Failed Test") }
 }
 
 func TestisEnd(t *testing.T){
@@ -75,34 +128,34 @@ func TestUpdatePosition(t *testing.T){
 func TestReadChar(t *testing.T){
 	lex := New("CREATE;")
 
-	if !checkLexData(lex, "CREATE;", 0, 1, 'C'){ t.Errorf("Failed Test") }
+	if !assertLexData(lex, "CREATE;", 0, 1, 'C'){ t.Errorf("Failed Test") }
 	
 	lex.readChar()
-	if !checkLexData(lex, "CREATE;", 1, 2, 'R'){ t.Errorf("Failed Test") }
+	if !assertLexData(lex, "CREATE;", 1, 2, 'R'){ t.Errorf("Failed Test") }
 
 	lex.readChar()
-	if !checkLexData(lex, "CREATE;", 2, 3, 'E'){ t.Errorf("Failed Test") }
+	if !assertLexData(lex, "CREATE;", 2, 3, 'E'){ t.Errorf("Failed Test") }
 
 	lex.readChar()
-	if !checkLexData(lex, "CREATE;", 3, 4, 'A'){ t.Errorf("Failed Test") }
+	if !assertLexData(lex, "CREATE;", 3, 4, 'A'){ t.Errorf("Failed Test") }
 
 	lex.readChar()
-	if !checkLexData(lex, "CREATE;", 4, 5, 'T'){ t.Errorf("Failed Test") }
+	if !assertLexData(lex, "CREATE;", 4, 5, 'T'){ t.Errorf("Failed Test") }
 
 	lex.readChar()
-	if !checkLexData(lex, "CREATE;", 5, 6, 'E'){ t.Errorf("Failed Test") }
+	if !assertLexData(lex, "CREATE;", 5, 6, 'E'){ t.Errorf("Failed Test") }
 
 	lex.readChar()
-	if !checkLexData(lex, "CREATE;", 6, 7, ';'){ t.Errorf("Failed Test") }
+	if !assertLexData(lex, "CREATE;", 6, 7, ';'){ t.Errorf("Failed Test") }
 
 	lex.readChar()
-	if !checkLexData(lex, "CREATE;", 7, 8, 0){ t.Errorf("Failed Test") }
+	if !assertLexData(lex, "CREATE;", 7, 8, 0){ t.Errorf("Failed Test") }
 
 	lex.readChar()
-	if !checkLexData(lex, "CREATE;", 8, 9, 0){ t.Errorf("Failed Test") }
+	if !assertLexData(lex, "CREATE;", 8, 9, 0){ t.Errorf("Failed Test") }
 
 	lex.readChar()
-	if !checkLexData(lex, "CREATE;", 9, 10, 0){ t.Errorf("Failed Test") }
+	if !assertLexData(lex, "CREATE;", 9, 10, 0){ t.Errorf("Failed Test") }
 }
 
 func TestNextToken(t *testing.T){
