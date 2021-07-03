@@ -8,7 +8,7 @@ import (
 func assertLexData(lex *Lexer, input string, position int, nextPosition int, ch byte) bool {
 	if input != lex.input{ return false }
 	if position != lex.position{ return false }
-	if nextPosition != lex.nextPosition{ return false }\
+	if nextPosition != lex.nextPosition{ return false }
 	if ch != lex.ch{ return false }
 
 	return true
@@ -70,10 +70,27 @@ func TestLiteralToken(t *testing.T){
 	if !assertTokenData(tok, "apple", token.IDENT){ t.Errorf("Failed Test") }
 }
 
+func TestskipWhitespace(t *testing.T){
+	lex := New("create dir test;")
+
+	var tok = lex.NextToken()
+	if !assertTokenData(tok, "create", token.CREATE){ t.Errorf("Failed Test") }
+
+	tok = lex.NextToken()
+	if !assertTokenData(tok, "dir", token.DIR){ t.Errorf("Failed Test") }
+
+	tok = lex.NextToken()
+	if !assertTokenData(tok, "test", token.IDENT){ t.Errorf("Failed Test") }
+
+	tok = lex.NextToken()
+	if !assertTokenData(tok, ";", token.SEMICOLON){ t.Errorf("Failed Test") }
+}
+
 func TestNewLexer(t *testing.T){
 	lex := New("CREATE DIR test;")
 
 	if !assertLexData(lex, "CREATE DIR test;", 0, 1, 'C'){ t.Errorf("Failed Test") }
+
 }
 
 func TestisEnd(t *testing.T){

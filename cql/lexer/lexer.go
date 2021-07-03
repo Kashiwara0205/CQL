@@ -52,6 +52,8 @@ func (lex *Lexer) readChar(){
 func (lex *Lexer) NextToken() token.Token{
 	var tok token.Token
 
+	lex.skipWhitespace()
+
 	switch lex.ch{
 	case '(':
 		tok = token.New(token.LPAREN, string(lex.ch))
@@ -91,4 +93,10 @@ func (lex *Lexer) readIdentifiter() string{
 	}
 
 	return lex.input[position:lex.position]
+}
+
+func (lex *Lexer) skipWhitespace(){
+	for lex.ch == ' ' || lex.ch == '\t' || lex.ch == '\n' || lex.ch == '\r'{
+		lex.readChar()
+	}
 }
