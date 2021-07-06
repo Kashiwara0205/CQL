@@ -10,6 +10,9 @@ build:
 run:
 	sudo docker exec -ti cql ./bin/cql
 
+start:
+	sudo docker exec -ti cql go run main.go
+
 test:
 	sudo docker exec -ti cql go test -v ./lexer
 	sudo docker exec -ti cql go test -v ./token

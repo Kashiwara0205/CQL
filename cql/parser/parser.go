@@ -200,3 +200,7 @@ func (p *Parser) noPrefixParseFnError(t token.TokenType){
 	msg := fmt.Sprintf("no prefix parse fuction for %s found", t)
 	p.errors = append(p.errors, msg)
 }
+
+func (p *Parser) Errors() []string{
+	return p.errors
+}
