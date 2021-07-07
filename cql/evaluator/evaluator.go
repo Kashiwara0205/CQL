@@ -12,10 +12,10 @@ func Eval(node ast.Node) object.Object{
 		return evalProgram(node)
 	case *ast.Identifier:
 		return evalIdentifier(node)
-	case *ast.Target:
-		return evalTarget(node)
-	case *ast.CreateStatement:
-		evalCreateStatement(node)
+	case *ast.CreateDirStatement:
+		CreateDirStatement(node)
+	case *ast.CreateCsvStatement:
+		CreateCsvStatement(node)
 	}
 	return nil
 }
@@ -29,17 +29,12 @@ func evalProgram(program *ast.Program)object.Object{
 	return result
 }
 
-func evalCreateStatement(node *ast.CreateStatement){
-	target := Eval(node.Target)
-	name := Eval(node.Name)
-
-	fmt.Printf("EXECUTE CREATE OPERATION\n")
-	fmt.Printf("%v\n", target)
-	fmt.Printf("%v\n", name)
+func CreateDirStatement(node *ast.CreateDirStatement){
+	fmt.Printf("%v\n", node.String())
 }
 
-func evalTarget(node *ast.Target) object.Object{
-	return &object.String{ Value: node.Value }
+func CreateCsvStatement(node *ast.CreateCsvStatement){
+	fmt.Printf("%v\n", node.String())
 }
 
 func evalIdentifier(node *ast.Identifier) object.Object{

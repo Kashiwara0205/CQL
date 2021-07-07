@@ -57,31 +57,37 @@ func (e *ExpressionStatement) String() string{
 	return ""
 }
 
-type CreateStatement struct{
+type CreateDirStatement struct{
 	Token token.Token
-	Target *Target
 	Name *Identifier
 }
-func (c *CreateStatement) statementNode() {}
+func (c *CreateDirStatement) statementNode() {}
 
-func (c *CreateStatement) TokenLiteral() string {return c.Token.Literal}
+func (c *CreateDirStatement) TokenLiteral() string {return c.Token.Literal}
 
-func (c *CreateStatement) String() string{
+func (c *CreateDirStatement) String() string{
 	var out bytes.Buffer
 
-	out.WriteString(c.TokenLiteral() + " " + c.Target.String() + " " + c.Name.String() + ";")
+	out.WriteString(c.TokenLiteral() + " " + "dir" + " " + c.Name.String() + ";")
 
 	return out.String()
 }
 
-type Target struct{
+type CreateCsvStatement struct{
 	Token token.Token
-	Value string
+	Name *Identifier
 }
+func (c *CreateCsvStatement) statementNode() {}
 
-func (t *Target) expressionNode() {}
-func (t *Target) TokenLiteral() string { return t.Token.Literal }
-func (t *Target) String() string {return t.Value}
+func (c *CreateCsvStatement) TokenLiteral() string {return c.Token.Literal}
+
+func (c *CreateCsvStatement) String() string{
+	var out bytes.Buffer
+
+	out.WriteString(c.TokenLiteral() + " " + "csv" + " " + c.Name.String() + ";")
+
+	return out.String()
+}
 
 type Identifier struct{
 	Token token.Token

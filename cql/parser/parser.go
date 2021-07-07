@@ -69,17 +69,6 @@ func (p *Parser) expectPeekToken(t token.TokenType) bool{
 	}
 }
 
-func (p *Parser) expectTargetToken() bool{
-	if p.peekTokenIs(token.DIR) || p.peekTokenIs(token.CSV){
-		p.nextToken()
-		return true
-	}else{
-		p.peekTargetError()
-		return false
-	}
-}
-
-
 func (p *Parser) peekPrecedence() int{
 	if p, ok := precedences[p.peekToken.Type]; ok{
 		return p
@@ -108,27 +97,52 @@ func (p *Parser) ParseProgram() *ast.Program{
 func (p *Parser) parseStatement() ast.Statement{
 	switch p.curToken.Type{
 	case token.CREATE:
-		return p.pareseCreateStatement()
+		if p.peekTokenIs(token.DIR){
+			return p.pareseCreateDirStatement()
+		}
+
+		if p.peekTokenIs(token.CSV){
+			return p.pareseCreateCsvStatement()
+		}
+
+		p.parseCreateTokenError()
+		return nil
 	default:
 		return p.parseExpressionStatement()
 	}
 }
 
-func (p *Parser) pareseCreateStatement() *ast.CreateStatement{
-	stmt := &ast.CreateStatement{ Token: p.curToken }
+func (p *Parser) pareseCreateDirStatement() *ast.CreateDirStatement{
+	stmt := &ast.CreateDirStatement{ Token: p.curToken }
 
-	// DIR or CSV
-	if !p.expectTargetToken(){
+	if !p.expectPeekToken(token.DIR){
 		return nil
 	}
-
-	stmt.Target = &ast.Target{Token: p.curToken, Value: p.curToken.Literal}
 
 	if !p.expectPeekToken(token.IDENT){
 		return nil
 	}
 
-	// name
+	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	if p.peekTokenIs(token.SEMICOLON){
+		p.nextToken()
+	}
+
+	return stmt
+}
+
+func (p *Parser) pareseCreateCsvStatement() *ast.CreateCsvStatement{
+	stmt := &ast.CreateCsvStatement{ Token: p.curToken }
+
+	if !p.expectPeekToken(token.CSV){
+		return nil
+	}
+
+	if !p.expectPeekToken(token.IDENT){
+		return nil
+	}
+
 	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 
 	if p.peekTokenIs(token.SEMICOLON){
@@ -190,8 +204,8 @@ func (p *Parser) peekError(t token.TokenType){
 	p.errors = append(p.errors, msg)
 }
 
-func (p *Parser) peekTargetError(){
-	msg := fmt.Sprintf("expected target token no")
+func (p *Parser) parseCreateTokenError(){
+	msg := fmt.Sprintf("expected csv or dir no be")
 	p.errors = append(p.errors, msg)
 }
 

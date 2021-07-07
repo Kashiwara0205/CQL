@@ -26,18 +26,13 @@ func TestCreateDirStatement(t *testing.T){
 
 	if len(program.Statements) != 1{ t.Errorf("Failed Test") }
 
-	stmt := program.Statements[0].(*ast.CreateStatement)
+	stmt := program.Statements[0].(*ast.CreateDirStatement)
 
 	if "create dir test;" != stmt.String(){ t.Errorf("Failed Test") }
 
 	// test create token
 	var tok = stmt.Token
 	if !assertTokenData(tok, "create", token.CREATE){ t.Errorf("Failed Test") }
-
-	// test target token
-	var target = stmt.Target
-	tok = target.Token
-	if !assertTokenData(tok, "dir", token.DIR){ t.Errorf("Failed Test") }
 
 	// test name token
 	var name = stmt.Name
@@ -57,18 +52,13 @@ func TestCreateCsvStatement(t *testing.T){
 
 	if len(program.Statements) != 1{ t.Errorf("Failed Test") }
 
-	stmt := program.Statements[0].(*ast.CreateStatement)
+	stmt := program.Statements[0].(*ast.CreateCsvStatement)
 
 	if "create csv test;" != stmt.String(){ t.Errorf("Failed Test") }
 
 	// test create token
 	var tok = stmt.Token
 	if !assertTokenData(tok, "create", token.CREATE){ t.Errorf("Failed Test") }
-
-	// test target token
-	var target = stmt.Target
-	tok = target.Token
-	if !assertTokenData(tok, "csv", token.CSV){ t.Errorf("Failed Test") }
 
 	// test name token
 	var name = stmt.Name
