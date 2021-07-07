@@ -134,16 +134,41 @@ func (p *Parser) pareseCreateDirStatement() *ast.CreateDirStatement{
 
 func (p *Parser) pareseCreateCsvStatement() *ast.CreateCsvStatement{
 	stmt := &ast.CreateCsvStatement{ Token: p.curToken }
+	columns := []*ast.Identifier{}
 
 	if !p.expectPeekToken(token.CSV){
 		return nil
 	}
-
+	
 	if !p.expectPeekToken(token.IDENT){
 		return nil
 	}
 
 	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	if !p.expectPeekToken(token.LPAREN){
+		return nil
+	}
+
+	p.nextToken()
+
+	column := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+	columns = append(columns, column)
+
+	for p.peekTokenIs(token.COMMA){
+		// move to comma
+		p.nextToken()
+		// move to column
+		p.nextToken()
+		column := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+		columns = append(columns, column)
+	}
+
+	if !p.expectPeekToken(token.RPAREN){
+		return nil
+	}
+
+	stmt.Columns = columns
 
 	if p.peekTokenIs(token.SEMICOLON){
 		p.nextToken()

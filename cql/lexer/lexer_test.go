@@ -49,6 +49,13 @@ func TestSemicolonToken(t *testing.T){
 	if !assertTokenData(tok, ";", token.SEMICOLON){ t.Errorf("Failed Test") }
 }
 
+func TestCommaToken(t *testing.T){
+	lex := New(",")
+	tok := lex.NextToken()
+	if !assertLexData(lex, ",", 1, 2, 0){ t.Errorf("Failed Test") }
+	if !assertTokenData(tok, ",", token.COMMA){ t.Errorf("Failed Test") }
+}
+
 func TestRparenToken(t *testing.T){
 	lex := New(")")
 	tok := lex.NextToken()

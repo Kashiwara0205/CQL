@@ -59,6 +59,8 @@ func (lex *Lexer) NextToken() token.Token{
 		tok = token.New(token.LPAREN, string(lex.ch))
 	case ')':
 		tok = token.New(token.RPAREN, string(lex.ch))
+	case ',':
+		tok = token.New(token.COMMA, string(lex.ch))
 	case 0:
 		tok = token.New(token.EOF, "")
 	case ';':

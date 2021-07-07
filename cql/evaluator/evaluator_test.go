@@ -19,7 +19,7 @@ func TestEvalCreateDir(t *testing.T){
 
 func TestEvalCreateCsv(t *testing.T){
 	input := `
-		create csv test;
+		create csv test (id, name);
 	`
 
 	lex := lexer.New(input)

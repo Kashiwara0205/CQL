@@ -3,6 +3,7 @@ package ast
 import (
 	"cql/token"
 	"bytes"
+	"strings"
 )
 
 type Program struct{
@@ -76,6 +77,7 @@ func (c *CreateDirStatement) String() string{
 type CreateCsvStatement struct{
 	Token token.Token
 	Name *Identifier
+	Columns []*Identifier
 }
 func (c *CreateCsvStatement) statementNode() {}
 
@@ -84,7 +86,12 @@ func (c *CreateCsvStatement) TokenLiteral() string {return c.Token.Literal}
 func (c *CreateCsvStatement) String() string{
 	var out bytes.Buffer
 
-	out.WriteString(c.TokenLiteral() + " " + "csv" + " " + c.Name.String() + ";")
+	columns := []string{}
+	for _, p := range c.Columns{
+		columns = append(columns, p.String())
+	}
+
+	out.WriteString(c.TokenLiteral() + " " + "csv" + " " + c.Name.String()  + " (" + strings.Join(columns, ", ") + ")" + ";")
 
 	return out.String()
 }

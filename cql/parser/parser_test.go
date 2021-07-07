@@ -42,7 +42,7 @@ func TestCreateDirStatement(t *testing.T){
 
 func TestCreateCsvStatement(t *testing.T){
 	input := `
-		create csv test;
+		create csv test (id, name);
 	`
 
 	lex := lexer.New(input)
@@ -54,14 +54,5 @@ func TestCreateCsvStatement(t *testing.T){
 
 	stmt := program.Statements[0].(*ast.CreateCsvStatement)
 
-	if "create csv test;" != stmt.String(){ t.Errorf("Failed Test") }
-
-	// test create token
-	var tok = stmt.Token
-	if !assertTokenData(tok, "create", token.CREATE){ t.Errorf("Failed Test") }
-
-	// test name token
-	var name = stmt.Name
-	tok = name.Token
-	if !assertTokenData(tok, "test", token.IDENT){ t.Errorf("Failed Test") }
+	if "create csv test (id, name);" != stmt.String(){ t.Errorf("Failed Test") }
 }

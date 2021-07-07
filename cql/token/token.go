@@ -24,7 +24,8 @@ const(
 
 	LPAREN = "("
 	RPAREN = ")"
-
+	
+	COMMA = ","
 	SEMICOLON = ";"
 )
 
