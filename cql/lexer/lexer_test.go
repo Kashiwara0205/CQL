@@ -21,6 +21,27 @@ func assertTokenData(tok token.Token, literal string, tokenType token.TokenType)
 	return true
 }
 
+func TestUseToken(t *testing.T){
+	lex := New("use")
+	tok := lex.NextToken()
+	if !assertLexData(lex, "use", 3, 4, 0){ t.Errorf("Failed Test") }
+	if !assertTokenData(tok, "use", token.USE){ t.Errorf("Failed Test") }
+}
+
+func TestFromToken(t *testing.T){
+	lex := New("from")
+	tok := lex.NextToken()
+	if !assertLexData(lex, "from", 4, 5, 0){ t.Errorf("Failed Test") }
+	if !assertTokenData(tok, "from", token.FROM){ t.Errorf("Failed Test") }
+}
+
+func TestSelectToken(t *testing.T){
+	lex := New("select")
+	tok := lex.NextToken()
+	if !assertLexData(lex, "select", 6, 7, 0){ t.Errorf("Failed Test") }
+	if !assertTokenData(tok, "select", token.SELECT){ t.Errorf("Failed Test") }
+}
+
 func TestCreateToken(t *testing.T){
 	lex := New("create")
 	tok := lex.NextToken()

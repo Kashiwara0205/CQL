@@ -19,6 +19,9 @@ const(
 	CREATE = "CREATE"
 	CSV = "CSV"
 	DIR = "DIR"
+	SELECT = "SELECT"
+	FROM = "FROM"
+	USE = "USE"
 
 	IDENT = "IDENT"
 
@@ -30,6 +33,9 @@ const(
 )
 
 var keywords = map[string] TokenType{
+	"select": SELECT,
+	"use": USE,
+	"from": FROM,
 	"create": CREATE,
 	"csv": CSV,
 	"dir": DIR,
