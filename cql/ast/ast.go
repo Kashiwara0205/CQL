@@ -58,6 +58,59 @@ func (e *ExpressionStatement) String() string{
 	return ""
 }
 
+type UseStatement struct{
+	Token token.Token
+	DirName *Identifier
+}
+func (u *UseStatement) statementNode() {}
+
+func (u *UseStatement) TokenLiteral() string {return u.Token.Literal}
+
+func (u *UseStatement) String() string{
+	var out bytes.Buffer
+
+	out.WriteString(u.TokenLiteral() + " " + u.DirName.String() + ";")
+
+	return out.String()
+}
+
+type FromStatement struct{
+	Token token.Token
+	Name *Identifier
+}
+func (c *FromStatement) statementNode() {}
+
+func (c *FromStatement) TokenLiteral() string {return c.Token.Literal}
+
+func (c *FromStatement) String() string{
+	var out bytes.Buffer
+
+	out.WriteString(c.TokenLiteral() + " " + c.Name.String())
+
+	return out.String()
+}
+
+type SelectStatement struct{
+	Token token.Token
+	Columns []Expression // COUNTやMAXなども入れる予定なのでIdentifierでなく、Expressionにしている
+}
+func (s *SelectStatement) statementNode() {}
+
+func (s *SelectStatement) TokenLiteral() string {return s.Token.Literal}
+
+func (s *SelectStatement) String() string{
+	var out bytes.Buffer
+
+	args := []string{}
+	for _, p := range s.Columns{
+		args = append(args, p.String())
+	}
+
+	out.WriteString(s.TokenLiteral() + " "  + strings.Join(args, ", "))
+
+	return out.String()
+}
+
 type CreateDirStatement struct{
 	Token token.Token
 	Name *Identifier
@@ -92,6 +145,27 @@ func (c *CreateCsvStatement) String() string{
 	}
 
 	out.WriteString(c.TokenLiteral() + " " + "csv" + " " + c.Name.String()  + " (" + strings.Join(columns, ", ") + ")" + ";")
+
+	return out.String()
+}
+
+type BuitInFunction struct{
+	Token token.Token
+	Args []*Identifier
+}
+func (b *BuitInFunction) expressionNode() {}
+
+func (b *BuitInFunction) TokenLiteral() string { return b.Token.Literal }
+
+func (b *BuitInFunction) String() string{
+	var out bytes.Buffer
+
+	args := []string{}
+	for _, p := range b.Args{
+		args = append(args, p.String())
+	}
+
+	out.WriteString(b.TokenLiteral() + " ("  + strings.Join(args, ", ") + " )")
 
 	return out.String()
 }

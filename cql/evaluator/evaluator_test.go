@@ -27,3 +27,14 @@ func TestEvalCreateCsv(t *testing.T){
 	program := p.ParseProgram()
 	Eval(program)
 }
+
+func TestEvalUse(t *testing.T){
+	input := `
+		use test_dir;
+	`
+
+	lex := lexer.New(input)
+	p := parser.New(lex)
+	program := p.ParseProgram()
+	Eval(program)
+}

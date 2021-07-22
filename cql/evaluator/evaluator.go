@@ -16,6 +16,12 @@ func Eval(node ast.Node) object.Object{
 		CreateDirStatement(node)
 	case *ast.CreateCsvStatement:
 		CreateCsvStatement(node)
+	case *ast.UseStatement:
+		UseStatement(node)
+	case *ast.FromStatement:
+		FromStatement(node)
+	case *ast.SelectStatement:
+		SelectStatement(node)
 	}
 	return nil
 }
@@ -34,6 +40,18 @@ func CreateDirStatement(node *ast.CreateDirStatement){
 }
 
 func CreateCsvStatement(node *ast.CreateCsvStatement){
+	fmt.Printf("%v\n", node.String())
+}
+
+func UseStatement(node *ast.UseStatement){
+	fmt.Printf("%v\n", node.String())
+}
+
+func FromStatement(node *ast.FromStatement){
+	fmt.Printf("%v\n", node.String())
+}
+
+func SelectStatement(node *ast.SelectStatement){
 	fmt.Printf("%v\n", node.String())
 }
 

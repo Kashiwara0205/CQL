@@ -107,9 +107,27 @@ func (p *Parser) parseStatement() ast.Statement{
 
 		p.parseCreateTokenError()
 		return nil
+	case token.USE:
+		return p.parseUseStatement()
 	default:
 		return p.parseExpressionStatement()
 	}
+}
+
+func (p *Parser) parseUseStatement() *ast.UseStatement{
+	stmt := &ast.UseStatement{ Token: p.curToken }
+
+	if !p.expectPeekToken(token.IDENT){
+		return nil
+	}
+
+	stmt.DirName = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+	
+	if p.peekTokenIs(token.SEMICOLON){
+		p.nextToken()
+	}
+
+	return stmt
 }
 
 func (p *Parser) pareseCreateDirStatement() *ast.CreateDirStatement{

@@ -56,3 +56,19 @@ func TestCreateCsvStatement(t *testing.T){
 
 	if "create csv test (id, name);" != stmt.String(){ t.Errorf("Failed Test") }
 }
+
+func TestUseStatement(t *testing.T){
+	input := `
+		use hoge;
+	`
+
+	lex := lexer.New(input)
+	p := New(lex)
+
+	program := p.ParseProgram()
+	if len(program.Statements) != 1{ t.Errorf("Failed Test") }
+
+	stmt := program.Statements[0].(*ast.UseStatement)
+
+	if "use hoge;" != stmt.String(){ t.Errorf("Failed Test") }
+}
